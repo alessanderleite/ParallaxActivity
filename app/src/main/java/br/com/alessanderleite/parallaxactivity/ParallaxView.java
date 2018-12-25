@@ -88,4 +88,22 @@ public class ParallaxView extends SurfaceView implements Runnable {
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
+
+    // Clean up our thread if the game is stopped
+    public void pause() {
+        running = false;
+        try {
+            gameThread.join();
+        } catch (InterruptedException e) {
+            // Error
+        }
+    }
+
+    // Make a new thread and start it
+    // Execution moves to our run method
+    public void resume() {
+        running = true;
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
 }
