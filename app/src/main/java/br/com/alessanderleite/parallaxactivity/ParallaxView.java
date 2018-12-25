@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -44,6 +45,24 @@ public class ParallaxView extends SurfaceView implements Runnable {
         // Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
+
+        // Initialize our array list
+        backgrounds = new ArrayList<>();
+
+        // load the background data into the Background objects and
+        // place them in our GameObject arraylist
+
+        backgrounds.add(new Background(
+                this.context,
+                screenWidth,
+                screenHeight,
+                "skyline", 0, 80, 50));
+
+        backgrounds.add(new Background(
+                this.context,
+                screenWidth,
+                screenHeight,
+                "grass", 70, 110, 200));
     }
 
 
@@ -109,5 +128,30 @@ public class ParallaxView extends SurfaceView implements Runnable {
         running = true;
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    private void drawBackground(int position) {
+
+        // Make a copy of the relevant background
+        Background bg = backgrounds.get(position);
+
+        // define what portion of images to capture and
+        // what coordinates of screen to draw them at
+
+        // For the regular bitmap
+        Rect fromRect1 = new Rect(0, 0, bg.width - bg.xClip, bg.height);
+        Rect toRect1 = new Rect(bg.xClip, bg.startY, bg.width, bg.endY);
+
+        Rect fromRect2 = new Rect(bg.width - bg.xClip, 0, bg.width, bg.height);
+        Rect toRect2 = new Rect(0, bg.startY, bg.xClip, bg.endY);
+
+        // draw the two background bitmaps
+        if (!bg.reversedFirst) {
+            canvas.drawBitmap(bg.bitmap, fromRect1, toRect1, paint);
+            canvas.drawBitmap(bg.bitmapReversed, fromRect2, toRect2, paint);
+        } else {
+            canvas.drawBitmap(bg.bitmap, fromRect2, toRect2, paint);
+            canvas.drawBitmap(bg.bitmapReversed, fromRect1, toRect1, paint);
+        }
     }
 }
