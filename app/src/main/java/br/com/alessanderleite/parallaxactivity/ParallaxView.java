@@ -85,6 +85,9 @@ public class ParallaxView extends SurfaceView implements Runnable {
 
     private void update() {
         // Update all the background positions
+        for (Background bg : backgrounds) {
+            bg.update(fps);
+        }
     }
 
     private void draw() {
@@ -97,6 +100,7 @@ public class ParallaxView extends SurfaceView implements Runnable {
             canvas.drawColor(Color.argb(255, 0, 3, 70));
 
             // draw the background parallax
+            drawBackground(0);
 
             // draw the rest of the game
             paint.setTextSize(60);
@@ -106,6 +110,7 @@ public class ParallaxView extends SurfaceView implements Runnable {
             canvas.drawText("I am a train", 50, screenHeight / 100 * 80, paint);
 
             // draw the foreground parallax
+            drawBackground(1);
 
             // unlock and draw the scene
             ourHolder.unlockCanvasAndPost(canvas);
