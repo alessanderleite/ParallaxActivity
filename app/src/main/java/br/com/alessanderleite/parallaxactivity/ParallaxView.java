@@ -9,7 +9,11 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 public class ParallaxView extends SurfaceView implements Runnable {
+
+    ArrayList<Background> backgrounds;
 
     private volatile boolean running;
     private Thread gameThread = null;
